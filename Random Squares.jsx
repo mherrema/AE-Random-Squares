@@ -53,6 +53,13 @@
         }
 
         function randomizeSquares(squareCount, squaresLit, minIntensity, maxIntensity, bpm, fade, changePerMeasure) {
+            //normalize inputs
+            squareCount = Math.floor(squareCount);
+            squaresLit = Math.floor(squaresLit);
+            minIntensity = Math.floor(minIntensity);
+            maxIntensity = Math.floor(maxIntensity);
+            bpm = Math.floor(bpm);
+            
             //time in seconds of a beat
             var interval = 60/bpm;
             if (changePerMeasure) {
