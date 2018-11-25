@@ -3,22 +3,30 @@
     scriptBuildUI(thisObj)
 
     function scriptBuildUI(thisObj) {
-        var win = (thisObj instanceof Panel) ? thisObj : new Window("palette", "Setup Panels", undefined);
+        var win = (thisObj instanceof Panel) ? thisObj : new Window('palette', "Setup Panels", undefined);
         win.spacing = 10;
         win.orientation = "column";
+
+        var tpanel = win.add('tabbedpanel');
+        var panelTab = tpanel.add('tab', undefined, "Panels");
+
+        var shapesTab = tpanel.add('tab', undefined, "Shapes");
 
         var sliderSize = "width: 250, height: 20";
         var textBoxSize = "width: 30, height: 20";
 
-        panelCount = setupSlider(11, 0, 15, "Number of Panels");
-        panelWidth = setupSlider(291, 0, 350, "Panel Width");
-        panelHeight = setupSlider(720, 0, 1024, "Panel Height");
-        panelOffset = setupSlider(19, 0, 30, "Panel Offset");
+        panelCount = setupSlider(11, 0, 15, "Number of Panels", panelTab);
+        panelWidth = setupSlider(291, 0, 350, "Panel Width", panelTab);
+        panelHeight = setupSlider(720, 0, 1024, "Panel Height", panelTab);
+        panelOffset = setupSlider(19, 0, 30, "Panel Offset", panelTab);
 
-        function setupSlider(val, min, max, title) {
-            var m = win.add("statictext", undefined, title);
+        horizontalShapes = setupSlider(3, 0, 10, "Horizontal Shapes", shapesTab);
+        verticalShapes = setupSlider(3, 0, 10, "Vertical Shapes", shapesTab);
+
+        function setupSlider(val, min, max, title, window) {
+            var m = window.add("statictext", undefined, title);
             m.alignment = "left";
-            var group = win.add("group");
+            var group = window.add("group");
             group.orientation = "row";
             group.alignment = "left";
             var f = group.add("edittext", undefined, val);
@@ -40,11 +48,11 @@
         var button = groupThree.add("button", undefined, "Go");
         button.onClick = function () {
             // randomizeSquares(squareCount.value, squaresLit.value, minIntensity.value, maxIntensity.value, bpm.value, checkbox2.value, checkbox1.value);
-            createPanels(panelCount.value, panelWidth.value, panelHeight.value, panelOffset.value);
+            createPanels(panelCount.value, panelWidth.value, panelHeight.value, panelOffset.value, horizontalShapes.value, verticalShapes.value);
         }
 
 
-        function createPanels(panelCount, panelWidth, panelHeight, panelOffset) {
+        function createPanels(panelCount, panelWidth, panelHeight, panelOffset, horizontalShapes, verticalShapes) {
 
             var curComp = app.project.activeItem;
 
@@ -53,9 +61,8 @@
                 panelWidth = Math.floor(panelWidth);
                 panelHeight = Math.floor(panelHeight);
                 panelOffset = Math.floor(panelOffset);
-
-                var horizontalShapes = 1;
-                var verticalShapes = 1;
+                horizontalShapes = Math.floor(horizontalShapes);
+                verticalShapes = Math.floor(verticalShapes);
 
                 var shapeWidth = panelWidth / horizontalShapes;
                 var shapeHeight = panelHeight / verticalShapes;
